@@ -13,14 +13,19 @@ export class CreateChat {
 		return { id, name };
 	}
 
+	private async createChat({ id, name }: CreateChatType) {
+		const chat = await this.db.chat.create({
+			data: this.toPrismaInput({ id, name }),
+		});
+		return chat;
+	}
+
 	public handler = async ({
 		body,
 	}: Context<{
 		body: CreateChatType;
 	}>) => {
-		const chat = await this.db.chat.create({
-			data: this.toPrismaInput(body),
-		});
+		const chat = await this.createChat(body);
 		return { chat };
 	};
 }
